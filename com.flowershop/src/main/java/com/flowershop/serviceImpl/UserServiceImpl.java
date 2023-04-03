@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
                 User user = userDao.findByEmailId(requestMap.get("email"));
                 if(Objects.isNull(user)) {
                     userDao.save(getUserFromMap(requestMap));
+                    sendMailToUser(requestMap.get("email"));
                     return FlowerShopUtils.getResponseEntity("Successful sign up!", HttpStatus.OK);
                 }
                 else {
@@ -159,4 +160,10 @@ public class UserServiceImpl implements UserService {
             emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(), "Account disabled", "USER:-" + user + "\n is disabled by \nADMIN:-" + jwtFilter.getCurrentUser(), allAdmin);
         }
     }
+
+    private void sendMailToUser(String email) {
+        emailUtils.sendSimpleMessage(email, "Successful sign up", "Congratulations!\n Your sign up on Tulipa Flower Shop Webpage was successful. Happy shopping!\n Tulipa Team", new ArrayList<>() {
+        });
+    }
+
 }
